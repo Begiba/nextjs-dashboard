@@ -2,6 +2,7 @@ import postgres from 'postgres';
 import {
   CustomerField,
   CustomersTableType,
+  CustomerTableField,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -174,6 +175,25 @@ export async function fetchCustomers() {
       SELECT
         id,
         name
+      FROM customers
+      ORDER BY name ASC
+    `;
+
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
+  }
+}
+
+export async function fetchCustomersTable() {
+  try {
+    const customers = await sql<CustomerTableField[]>`
+      SELECT
+        id,
+        name,
+        email,
+        image_url
       FROM customers
       ORDER BY name ASC
     `;
